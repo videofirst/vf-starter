@@ -6,31 +6,6 @@
 #
 # ======================================================================================================================
 
-# These cannot be changed
-properties:
-
-  license: "This is a template"
-  author: "This is also a template"
-
-# These are changed at runtime
-parameters:
-
-  base-package:
-    type: String                  # some validation too but creates model object of that type
-    default: io.videofirst.capture.uitests  # default value (template support)
-    required: true                          # can it be left blank?  note, blank = null (template support)
-    description: Base package of the user interface tests  # description         (template support)
-    validation: # validation object            (all fields have template support)
-      min: 3
-      max:
-      match:
-      message:
-    allowed-values: # allowed values - either list (where each value is a separate template) OR String - single complex template
-      - t2.micro
-      - m1.small
-      - m1.large
-
-
 files:
 
   ".gitignore":
