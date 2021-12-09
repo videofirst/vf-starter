@@ -8,6 +8,7 @@ import io.micronaut.http.MediaType;
 import io.micronaut.http.MutableHttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Produces;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -72,12 +73,11 @@ public class ApiController {
             mediaType = MEDIA_TYPE_APPLICATION_ZIP
         )
     )
-    public HttpResponse<Writable> createZip() {
+    public HttpResponse<Writable> createZip(@PathVariable("project") String project) {
         MutableHttpResponse<Writable> response = HttpResponse.created(new Writable() {
             @Override
             public void writeTo(OutputStream outputStream, @Nullable Charset charset) throws IOException {
                 try {
-
                     apiService.createZip(params, outputStream);
                     outputStream.flush();
                 } catch (Exception e) {
