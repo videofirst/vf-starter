@@ -1,0 +1,47 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("io.micronaut.application") version "3.0.0"
+}
+
+version = "0.1"
+group = "io.videofirst.vfa"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("io.videofirst.vfa.*")
+    }
+}
+
+dependencies {
+    compileOnly "org.projectlombok:lombok:1.18.20"
+    annotationProcessor "org.projectlombok:lombok:1.18.20"
+
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut:micronaut-validation")
+
+    implementation("io.swagger.core.v3:swagger-annotations")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.0")
+    implementation 'org.freemarker:freemarker:2.3.31'
+    implementation 'org.apache.commons:commons-compress:1.21'
+
+}
+
+application {
+    mainClass.set("io.videofirst.vfa.Application")
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion("1.8")
+    targetCompatibility = JavaVersion.toVersion("1.8")
+}
+
