@@ -1,0 +1,230 @@
+/* Variables */
+
+:root {
+  --primary: #0096f0;
+  --error: #F44336;
+  --extra-pale-grey: #f2f2f2;
+  --source-code: #f5f2f0;
+  --grey-border: #9E9E9E;
+  --active-label: #888;
+}
+
+/* Small Helper Classes */
+
+.dn { display: none !important; }
+.tc { text-align: center; }
+
+.pa-1 { padding: 1rem; }
+.pt-1 { padding-top: 1rem; }
+.pb-1 { padding-bottom: 1rem; }
+.pv-1 { padding-top: 1rem; padding-bottom: 1rem; }
+.pa-2 { padding: 2rem; }
+.pt-2 { padding-top: 2rem; }
+.pb-2 { padding-bottom: 2rem; }
+.pv-2 { padding-top: 2rem; padding-bottom: 2rem; }
+
+.mh-0_5 { margin-left: 0.5rem; margin-right: 0.5rem; }
+
+.w-75 { width: 75%; }
+
+/* Bigger Helper Classes */
+
+.white-shadow-box {
+  background: #fff;
+  box-shadow: 2px 2px 7px rgb(0 0 0 / 40%);
+  padding: 1rem;
+  margin: 0 auto;
+}
+
+/* Body */
+
+body {
+  background: var(--extra-pale-grey);
+}
+
+/* Header */
+
+.header {
+  margin: 0;
+  display: flex;
+  position: relative;
+  z-index: 10;
+  content: '';
+  top: 0;
+  width: 100%;
+  height: 120px;
+}
+.header::before {
+  content: "";
+  opacity: 1;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 120px;
+  position: absolute;
+  z-index: -3;
+  background-image: url('/img/mesh-gradient-300-60.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+}
+.header::after {
+  content: "";
+  opacity: 0.05;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 120px;
+  position: absolute;
+  z-index: -2;
+  background-image: url('/img/icon-background-light.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: top center;
+}
+.header-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+.header-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.header-sub-title {
+  font-size: 1.1rem;
+  color: #eee;
+}
+.header-image img {
+  height: 40px;
+}
+.header-text {
+  font-size: 1.7rem;
+  color: #eee;
+}
+.header-icon {
+  width: 40px;
+  height: 40px;
+  margin: 4px;
+  background: rgba(40,40,40,0.6);
+  border-radius: 25%;
+}
+.header-icon:hover{
+  border-radius: 10px;
+  box-shadow:    0px 0px 20px 0px rgba(255, 255, 255, 0.8);
+}
+
+/* Main */
+
+.main {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+/* Content Section */
+
+.content-header {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* Input */
+
+input:focus {
+  border-bottom: 1px solid #2792F0 !important;
+  box-shadow: 0 1px 0 0 #2792F0 !important;
+}
+input.invalid:focus {
+  border-bottom: 1px solid #F44336 !important;
+  box-shadow: 0 1px 0 0 #F44336 !important;
+}
+label.active {
+  color: var(--active-label) !important;
+}
+.actBtn {
+    background-color: #2792F0 !important;
+}
+
+/* Preview Section */
+
+.preview-section {
+  display: flex;
+  flex-grow: 1;
+  border-top: 1px solid var(--grey-border);
+  border-bottom: 1px solid var(--grey-border);
+  overflow: auto;
+}
+.preview-files-tree {
+  flex-grow: 0;
+  max-width: 25%;
+  flex-basis: 25%;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  border-right: 1px solid var(--grey-border);
+  flex-grow: 1;
+  display: flex;
+}
+.preview-file-source {
+  flex-grow: 0;
+  max-width: 75%;
+  flex-basis: 75%;
+  background: #f5f2f0 !important;
+}
+.preview-file-source pre {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  overflow: auto;
+}
+
+/* Commands */
+
+.command-container {
+  display: flex;
+  padding: 0.5rem;
+  background: var(--source-code);
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem;
+  min-height: 2.75rem;
+}
+.command-text {
+  font-family: monospace;
+  word-break: break-all;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+}
+.command-copy {
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+/* Modal */
+
+.modal {
+  width: 80% !important;
+  max-height: 90%;
+  height: 90%;
+  flex-direction: column;
+}
+.modal .modal-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 24px 24px 0 24px;
+  height: calc(100% - 56px - 1px);   /* Declare height because modal swaps display attribute between 'none' + 'block' */
+  overflow: hidden;
+}
+
+/* Select */
+
+.dropdown-content li>a, .dropdown-content li>span { color: black; }
+
+/* Other */
+

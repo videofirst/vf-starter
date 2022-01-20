@@ -1,9 +1,9 @@
 plugins {
     id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("io.micronaut.application") version "3.0.0"
+    id("io.micronaut.application") version "3.0.2"
 }
 
-version = "0.1"
+version = "$version"
 group = "io.videofirst.vfa"
 
 repositories {
@@ -15,24 +15,41 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("io.videofirst.vfa.*")
+        annotations("io.videofirst.starter.*")
     }
 }
 
 dependencies {
+
     compileOnly "org.projectlombok:lombok:1.18.20"
     annotationProcessor "org.projectlombok:lombok:1.18.20"
 
-    annotationProcessor("io.micronaut:micronaut-http-validation")
-    implementation("io.micronaut:micronaut-http-client")
-    implementation("io.micronaut:micronaut-runtime")
-    implementation("io.micronaut:micronaut-validation")
+    annotationProcessor "io.micronaut:micronaut-http-validation"
+    annotationProcessor "io.micronaut.openapi:micronaut-openapi"
+    implementation "io.micronaut:micronaut-http-client"
+    implementation "io.micronaut:micronaut-runtime"
+    implementation "io.micronaut:micronaut-validation"
+    implementation "io.micronaut.views:micronaut-views-freemarker"
+    implementation("io.micronaut:micronaut-management")
 
-    implementation("io.swagger.core.v3:swagger-annotations")
-    runtimeOnly("ch.qos.logback:logback-classic")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.0")
-    implementation 'org.freemarker:freemarker:2.3.31'
-    implementation 'org.apache.commons:commons-compress:1.21'
+    implementation "io.swagger.core.v3:swagger-annotations"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.13.0"
+    implementation "org.freemarker:freemarker:2.3.31"
+    implementation "commons-io:commons-io:2.11.0"
+    implementation "org.apache.commons:commons-compress:1.21"
+
+    runtimeOnly "ch.qos.logback:logback-classic"
+
+    // Testing
+
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.8.1"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.8.1"
+
+    testImplementation "io.rest-assured:rest-assured:4.2.+"
+    testImplementation 'io.micronaut:micronaut-http-client'
+
+    testImplementation "org.skyscreamer:jsonassert:1.5.0"
+    testImplementation "org.assertj:assertj-core:3.22.0"
 
 }
 
@@ -45,3 +62,7 @@ java {
     targetCompatibility = JavaVersion.toVersion("1.8")
 }
 
+tasks.withType(JavaCompile) {
+    options.fork = true
+    options.forkOptions.jvmArgs << '-Dmicronaut.openapi.views.spec=rapidoc.enabled=true,swagger-ui.enabled=true,swagger-ui.theme=flattop'
+}

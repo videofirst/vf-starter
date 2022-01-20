@@ -1,6 +1,6 @@
-# Contributing to Video First Starter
+# Contributing to VF Starter
 
-All contributions to VFA are encouraged. You can contribute in the following ways: -
+All contributions to VF Starter are encouraged. You can contribute in the following ways: -
 
 1. Enhance the documentation:
     * The Video First Starter docs are located in `docs` - al.
@@ -16,7 +16,7 @@ If you are interested in contributing to the documentation or the codebase then 
 3. Implement bug fix or new feature idea
 4. Create a pull request
 
-## Building VFA
+## Building VF Starter
 
 * JDK 8 (`JAVA_HOME` and `PATH` should be set accordingly)
 * Gradle (which will be downloaded using `gradlew` script)

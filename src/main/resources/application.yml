@@ -1,7 +1,24 @@
+# Micronaut configuration
 micronaut:
   application:
     name: starter
+  router:
+    static-resources:
+      ui:
+        enabled: true
+        mapping: "/**"
+        paths: "classpath:static"
+      swagger:
+        enabled: true
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+
+endpoints:
+  health:
+    enabled: true
 
 # All VFA Starter configuration
-vfa-starter:
-
+vf-starter:
+  base-url: http://localhost:8080
+  ui-path: /ui
+  default-template: vfa

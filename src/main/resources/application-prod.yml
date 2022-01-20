@@ -1,0 +1,5 @@
+# Production configuration
+vf-starter:
+  base-url: https://starter.videofirst.io
+  ui-url: ${vf-starter.base-url}/ui
+  default-template: vfa

@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- CSS -->
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css"/>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.css"
+        rel="stylesheet" data-noprefix/>
+
+  <!-- JavaScript -->
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/autoloader/prism-autoloader.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.js"></script>
+
+  <!--Let browser know website is optimized for mobile-->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<style>
+
+/* Variables */
+
+:root {
+  --primary: #0096f0;
+  --error: #F44336;
+  --extra-pale-grey: #f2f2f2;
+  --source-code: #f5f2f0;
+  --grey-border: #9E9E9E;
+  --active-label: #888;
+}
+
+/* Small Helper Classes */
+
+.dn { display: none !important; }
+.tc { text-align: center; }
+
+.pb-1 { padding-bottom: 1rem; }
+.pt-1 { padding-top: 1rem; }
+.pa-1 { padding: 1rem; }
+.pb-2 { padding-bottom: 2rem; }
+.pt-2 { padding-top: 2rem; }
+.pa-2 { padding: 2rem; }
+.pb-3 { padding-bottom: 3rem; }
+.pt-3 { padding-top: 3rem; }
+.pa-3 { padding: 3rem; }
+
+.mh-0_5 { margin-left: 0.5rem; margin-right: 0.5rem; }
+
+.w-75 { width: 75%; }
+
+/* Bigger Helper Classes */
+
+.white-shadow-box {
+  background: #fff;
+  box-shadow: 2px 2px 7px rgb(0 0 0 / 40%);
+  padding: 1rem;
+  margin: 0 auto;
+}
+
+/* Body */
+
+body {
+  margin: 0 auto;
+  max-width: 1200px;
+  background: var(--extra-pale-grey);
+}
+
+/* Content Section */
+
+.content-header {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+/* Input / Select / Labels / Buttons */
+
+input:focus {
+  border-bottom: 1px solid var(--primary) !important;
+  box-shadow: 0 1px 0 0 var(--primary) !important;
+}
+input.invalid:focus {
+  border-bottom: 1px solid var(--error) !important;
+  box-shadow: 0 1px 0 0 var(--error) !important;
+}
+.dropdown-content li>a, .dropdown-content li>span {
+  color: black;
+}
+label.active {
+  color: var(--active-label) !important;
+}
+.actBtn {
+    background-color: var(--primary) !important;
+}
+
+/* Preview Section */
+
+.preview-section {
+  display: flex;
+  flex-grow: 1;
+  border-top: 1px solid var(--grey-border);
+  border-bottom: 1px solid var(--grey-border);
+}
+.preview-files-tree {
+  flex-grow: 0;
+  max-width: 25%;
+  flex-basis: 25%;
+  overflow-x: auto;
+  padding: 0.5rem 0;
+  border-right: 1px solid var(--grey-border);
+  flex-grow: 1;
+  display: flex;
+}
+.preview-file-source {
+  flex-grow: 0;
+  max-width: 75%;
+  flex-basis: 75%;
+  overflow-x: auto;
+  background: var(--source-code) !important;
+}
+.preview-file-source pre {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  overflow-y: hidden;
+}
+
+/* Commands */
+
+.command-container {
+  display: flex;
+  padding: 0.5rem;
+  background: var(--source-code);
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem;
+}
+.command-text {
+  font-family: monospace;
+  word-break: break-all;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+}
+.command-copy {
+  margin-left: 0.5rem;
+  cursor: pointer;
+}
+
+/* Modal */
+
+.modal {
+  width: 80% !important;
+  max-height: 90%;
+  height: 90%;
+  flex-direction: column;
+}
+.modal .modal-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 24px 24px 0 24px;
+  height: calc(100% - 56px);   /* Declare height because modal swaps display attribute between 'none' + 'block' */
+}
+
+
+</style>
+
+<body>
+<h5>Materialize inputs with validation (with regex's) + project preview (using JS Tree / Prism)</h5>
+<br/>
+<div class="row">
+
+  <p class="content-header pb-1">Welcome to VF Starter - the quickest way to generate <a href="https://github.com/videofirst/vfa"
+    target="_blank">VFA (Video First Automation)</a> Projects</p>
+
+  <div class="white-shadow-box row">
+    <div class="input-field col s3">
+      <input id="project" type="text" class="validate" value="demo" regex="^([a-zA-Z]\w*)(-[a-zA-Z]\w*)*$" required=""
+             aria-required="true" data-param="vf-starter">
+      <label for="project">Project</label>
+      <span class="helper-text"
+            data-error="Invalid project. Each project section (separated by a dash) must start with a letter followed by letters and numbers e.g. imdb-tests">
+        </span>
+    </div>
+
+    <div class="input-field col s3">
+      <input id="package" type="text" class="validate" value="com.mycompany" regex="^([a-zA-Z]\w*)(\.[a-zA-Z]\w*)*$"
+             required="" aria-required="true" data-param="vf-starter">
+      <label for="package">Base Package</label>
+      <span class="helper-text"
+            data-error="Invalid project. Each project section (separated by a dot) must start with a letter followed by letters and numbers e.g. com.mycompany"></span>
+    </div>
+
+    <div class="input-field col s4">
+      <input id="description" type="text" class="validate" value="Description for project" required=""
+             aria-required="true" data-param="vf-starter">
+      <label for="description">Description</label>
+      <span class="helper-text" data-error="Description cannot be blank"></span>
+    </div>
+
+    <div class="input-field col s2">
+      <select id="prefix" class="initialized" onchange="updateCommandsAndButtonStates();">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      </select>
+      <label for="prefix">Include root folder in ZIP file</label>
+      <span class="helper-text" data-error="">Select "No" if folder already exists (e.g. GIT repo)</span>
+    </div>
+
+  </div>
+
+  <p class="tc pt-2">The project files can be viewed by clicking <b>Preview Files</b> button.
+    The <b>Generate Zip</b> button to download your VFA project as a ZIP file.</p>
+
+  <div class="actions-container tc pt-2 pb-3">
+    <span class="waves-effect waves-light actBtn btn mh-0_5" onclick="initTree();"><i class="material-icons right">find_in_page</i>Preview Files</span>
+    <span class="waves-effect waves-light actBtn btn mh-0_5" onclick="generateZip();"><i class="material-icons right">download</i>Generate ZIP</span>
+  </div>
+
+  <div class="curl-commands white-shadow-box w-75 tc">
+    <p class="tc">Alternatively, run this <b>curl</b> command to download a generated project directly to a folder on
+      your computer.</p>
+
+    <div class="command-container">
+      <div id="curl-url" class="command-text"></div>
+      <div class="command-copy material-icons" class="material-icons"
+           onclick="copyText('copy-curl', 'Curl URL copied to clipboard');">content_copy</div>
+    </div>
+
+    <p class="tc">After the ZIP file has been downloaded, this command will unzip the downloaded project ZIP file.</p>
+
+    <div class="command-container">
+      <div id="unzip-command" class="command-text"></div>
+      <div class="command-copy material-icons" class="material-icons"
+           onclick="copyText('unzip-command', 'Unzip command copied to clipboard');">content_copy</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal Structure -->
+<div id="preview-modal" class="modal">
+  <div class="modal-content">
+    <h4>Preview Project Files</h4>
+    <div class="preview-section dn">
+      <div class="preview-files-tree"></div>
+      <div class="preview-file-source">
+        <pre class="line-numbers"><code class="language-java"></code></pre>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close waves-effect waves-light btn-flat">Close</a>
+  </div>
+</div>
+
+</body>
+
+<script type="text/javascript">
+
+/**
+ * Validation listener for input fields (Supports Empty Field + Regex validation)
+ */ 
+$("input").on('input propertychange blur', function(event) {
+  var elm = event.currentTarget;
+  var val = elm.value;
+  var isValid = true; // assume valid
+
+  // check if required field
+  if (elm.hasAttribute("required")) {
+    isValid = val.trim() !== '';
+  }
+  // now check for regex
+  if (isValid && elm.hasAttribute("regex")) {
+    var regex = new RegExp(elm.getAttribute("regex"), 'g');
+    isValid = regex.test(val);
+  }
+  
+  elm.classList.remove(isValid ? "invalid" : "valid");
+  elm.classList.add(isValid ? "valid" : "invalid");
+
+  updateCommandsAndButtonStates();
+});
+
+/**
+ * Update the button state depending on.
+ */ 
+function updateCommandsAndButtonStates () {
+  var isInvalid = $('input.invalid').length > 0;
+  var project = $("#project").val();
+  var zipFile = project + ".zip";
+  var prefixParams = "prefix=" + $("#prefix").val();
+
+  var curl = "curl https://localhost:8080/" + zipFile + "?" + prefixParams + getParameterUrlParams () + " -o " + zipFile;
+  var unzip = "unzip " + project + ".zip .";
+
+  if (isInvalid) {
+    $('.actBtn').prop('disabled', true);
+    $('.actBtn').addClass('disabled');
+    $('#copy-curl').addClass('dn');
+    curl = "-";
+    unzip = "-";
+  }
+  else{
+  	$('.actBtn').prop('disabled', false);
+    $('.actBtn').removeClass('disabled');
+    $('#copy-curl').removeClass('dn');
+  }
+  $("#curl-url").text(curl);
+  $("#unzip-command").text(unzip);
+}
+
+/**
+ * Tree data.
+ */ 
+var previewJson = '{"files": {"settings.gradle": "rootProject.name=\\"demo\\"",        ".gitignore": "build\\nout\\nreports\\n.gradle", "src/test/java/demo/BasicSearchFilms.java": "package demo;\\n\\nimport static io.videofirst.vfa.Vfa.*;\\n\\nimport io.videofirst.vfa.Feature;\\nimport io.videofirst.vfa.Scenario;\\nimport io.videofirst.vfa.web.actions.selenide.WebActions;\\nimport jakarta.inject.Inject;\\n\\n@Feature\\npublic class BasicSearchFpackage demo;\\n"}}';
+var previewData = JSON.parse(previewJson);
+
+/**
+ * Find or create folder (if doesn't exist).
+ */ 
+function findOrCreateFolder(parent, folderName) {
+  for (var i = 0; i < parent.length; i++) {
+    if (parent[i].text === folderName) {
+      return parent[i].children; // already exists - so return
+    }
+  }
+  // Create new folder and add to parent
+  var folder = {
+    'text': folderName,
+    'children' : []
+  };
+  parent.push (folder);
+  return folder.children;
+}
+
+/**
+ * Init tree.
+ */ 
+function initTree() {  
+  var files = Object.keys(previewData.files).sort();
+  var treeData = [];  // start empty
+  for (var i = 0; i < files.length; i++) {
+	var file = files[i];
+	if (file.indexOf('/') === -1) { // normal file
+  	  treeData.push ({
+  	  	'id': file,
+  	  	'text': file,
+  	  	'icon': 'jstree-file'
+  	  });
+    }
+    else {
+      var parts = file.split('/');
+      var folder = treeData; // start at root
+      for (p = 0; p < parts.length - 1; p++) {
+      	folder = findOrCreateFolder (folder, parts[p]);
+      }
+      // now add remaing part as a file
+      folder.push ({
+      	'id': file,
+      	'text': parts[parts.length - 1],
+      	'icon': 'jstree-file', 
+      });
+    }
+  }
+  var displayNone = $('.preview-section').hasClass('dn');
+  if (displayNone) {
+  	$('.preview-section').removeClass('dn');
+
+   $('.preview-files-tree').jstree({'core' : {'data' : treeData}})
+    .bind("loaded.jstree", function (event, data) {
+      $(this).jstree("open_all");
+    })
+    .on("select_node.jstree", function (e, data) { 
+      
+      var filename = data.node.id;
+      var source = previewData.files[filename];
+      $(".preview-file-source code").html(source);
+      Prism.highlightElement($('.preview-file-source code')[0]);
+    });
+  }
+  else {
+  	$('.preview-files-tree').jstree({'core' : {'data' : treeData}});  // set data only
+  }
+
+  $('#preview-modal').modal('open');
+  // var previewModal = document.getElementById ('preview-model');
+  // M.Modal.open (previewModal);
+}
+
+function generateZip () {
+  var previewUrl = "/preview?" + getParameterUrlParams ();
+}
+
+function getParameterUrlParams () {
+  urlParams = "";
+  $('input[data-param="vf-starter"]').each(function() {
+    urlParams += "&" + this.id + "=" + encodeURIComponent(this.value);
+  });
+  return urlParams;
+}
+
+function copyText(textId, toastLabel) {
+  var textToCopy = $("#" + textId).text();
+  copyToClipboard(textToCopy);
+  M.toast({html: toastLabel, displayLength: 1000});
+}
+
+/**
+ * Copy to clip-board.
+ */
+function copyToClipboard(text) {
+    console.log(text);
+    if (window.clipboardData && window.clipboardData.setData) {
+        // Internet Explorer-specific code path to prevent textarea being shown while dialog is visible.
+        return window.clipboardData.setData("Text", text);
+    }
+    else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+        var textarea = document.createElement("textarea");
+        textarea.textContent = text;
+        textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in Microsoft Edge.
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+        }
+        catch (ex) {
+            console.warn("Copy to clipboard failed.", ex);
+            return prompt("Copy to clipboard: Ctrl+C, Enter", text);
+        }
+        finally {
+            document.body.removeChild(textarea);
+        }
+    }
+}
+
+// Upload button states
+updateCommandsAndButtonStates();
+
+document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('.modal');
+  var instances = M.Modal.init(elems);
+  $(".modal").modal({startingTop: '5%', endingTop: '5%'});
+  $('select').formSelect();
+});
+
+</script>
+
+</html>

@@ -1,0 +1,81 @@
+openapi: 3.0.1
+info:
+  title: API
+  description: The quickest way to generate VFA (Video First Automation) Projects
+  contact:
+    name: Video First
+    url: https://starter.videofirst.io
+    email: info@videofirst.io
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.txt
+paths:
+  /:
+    get:
+      summary: Returns help as plain-text.
+      description: Returns help as plain-text.
+      operationId: home
+      parameters: []
+      responses:
+        "200":
+          description: Plain text description of the API
+          content:
+            text/plain: {}
+  /{project}.json:
+    get:
+      summary: Returns a JSON preview of project.
+      description: Returns a JSON preview of project.
+      operationId: preview
+      parameters:
+      - name: project
+        in: path
+        description: Name of your project
+        required: true
+        schema:
+          type: string
+      - name: values
+        in: query
+        description: "Map of parameters e.g. package, description"
+        required: false
+        schema:
+          type: object
+          additionalProperties:
+            type: string
+          nullable: true
+      responses:
+        "200":
+          description: JSON based preview of a new project
+          content:
+            application/json: {}
+  /{project}.zip:
+    get:
+      summary: Generate project ZIP file.
+      description: Generate project ZIP file.
+      operationId: generateZip
+      parameters:
+      - name: project
+        in: path
+        description: Name of your project
+        required: true
+        schema:
+          type: string
+      - name: values
+        in: query
+        description: "Map of parameters e.g. package, description"
+        required: true
+        schema:
+          type: object
+          additionalProperties:
+            type: string
+      - name: prefix
+        in: query
+        description: "Boolean, if true the ZIP file will have a root folder (project)."
+        required: true
+        schema:
+          type: boolean
+          default: true
+      responses:
+        "200":
+          description: ZIP file containing generated project
+          content:
+            application/zip: {}

@@ -1,0 +1,13 @@
+{
+  "files": {
+    "gradlew": "Binary (5774 bytes)",
+    "settings.gradle": "rootProject.name=\"test-project\"",
+    ".gitignore": "build\nout\nreports\n.gradle",
+    "src/test/java/test-project/BasicSearchFilms.java": "package test-project;\n\nimport static io.videofirst.vfa.Vfa.*;\n\nimport io.videofirst.vfa.Feature;\nimport io.videofirst.vfa.Scenario;\nimport io.videofirst.vfa.web.actions.selenide.WebActions;\nimport jakarta.inject.Inject;\n\n@Feature\npublic class BasicSearchFilms {\n\n    @Inject\n    private WebActions web;\n\n    @Scenario\n    public void search_for_film_The_Green_Mile() {\n        given(\"A user is at the homepage\");\n        web.open(\"https://www.imdb.com\");\n\n        when(\"the user types the \\\"The Green Mile\\\" into search box\");\n        web.type(\"id=suggestion-search\", \"The Green Mile\");\n\n        and(\"the user clicks the search icon\");\n        web.click(\"#suggestion-search-button\");\n\n        then(\"I expect the see the results page\");\n        web.text_contains(\".findHeader\", \"Results for\");\n        web.text_contains(\".findSearchTerm\", \"The Green Mile\");\n\n        and(\"the top result only contains \\\"The Green Mile\\\"\");\n        web.exists(\"xpath=.//td[@class='result_text']/a[text() = 'The Green Mile']\");\n    }\n\n}",
+    "gradle/wrapper/gradle-wrapper.jar": "Binary (55190 bytes)",
+    "build.gradle": "repositories {\n    mavenCentral()\n    maven {\n        url \"https://repo.repsy.io/mvn/videofirst/vfa\"\n    }\n}\n\napply plugin: \"java\"\napply plugin: \"idea\"\n\nsourceCompatibility = 1.8\ntargetCompatibility = 1.8\n\ngroup = \"test-project\"\nversion = \"0.1\"\n\ndependencies {\n    testAnnotationProcessor \"io.videofirst.vfa:core:$vfaVersion\"\n    testImplementation \"io.videofirst.vfa:core:$vfaVersion\"\n    testImplementation \"io.videofirst.vfa.actions:web-selenide:$vfaVersion\"\n}\n\ncompileJava.options.encoding = 'UTF-8'\n\ntasks.withType(JavaCompile) {\n    options.encoding = 'UTF-8'\n}\n\ntest {\n    useJUnitPlatform()\n    systemProperty \"file.encoding\", \"utf-8\"\n    testLogging {\n        showStandardStreams = true\n    }\n}",
+    "gradle/wrapper/gradle-wrapper.properties": "distributionUrl=https\\://services.gradle.org/distributions/gradle-7.2-bin.zip\ndistributionBase=GRADLE_USER_HOME\ndistributionPath=wrapper/dists\nzipStorePath=wrapper/dists\nzipStoreBase=GRADLE_USER_HOME",
+    "gradlew.bat": "Binary (2674 bytes)",
+    "gradle.properties": "vfaVersion=${VFA_VERSION}\norg.gradle.java.installations.auto-download=false\norg.gradle.java.installations.auto-detect=false\norg.gradle.java.installations.fromEnv=JAVA_HOME"
+  }
+}

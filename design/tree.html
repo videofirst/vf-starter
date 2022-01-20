@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>jsTree test</title>
+  <!-- 2 load the theme CSS file -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css"/>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.css"
+        rel="stylesheet" data-noprefix/>
+
+</head>
+<body>
+<h3>Experiments on JS Tree / Prism</h3>
+
+<div id="jstree">
+  <!-- in this example the tree is populated from inline HTML -->
+  <ul>
+    <li>Root node 1
+      <ul>
+        <li id="child_node_1">Child node 1</li>
+        <li>Child node 2</li>
+      </ul>
+    </li>
+    <li>Root node 2</li>
+  </ul>
+</div>
+<!-- <button>demo button</button>-->
+<br/>
+<button onclick="initTree();">Generate Tree from JSON</button>
+
+<hr>
+<div id="tree2"></div>
+<div id="file-source"><pre class="line-numbers"><code class="language-java">public static void main {
+    String bla = "";
+  }</code></pre>
+</div>
+<hr>
+
+<div id="tree"></div>
+
+<!-- 4 include the jQuery library -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- 5 include the minified jstree source -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/autoloader/prism-autoloader.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.js"></script>
+
+<script>
+
+var previewJson = '{"files": {"settings.gradle": "rootProject.name=\\"demo\\"",        ".gitignore": "build\\nout\\nreports\\n.gradle", "src/test/java/demo/BasicSearchFilms.java": "package demo;\\n\\nimport static io.videofirst.vfa.Vfa.*;\\n\\nimport io.videofirst.vfa.Feature;\\nimport io.videofirst.vfa.Scenario;\\nimport io.videofirst.vfa.web.actions.selenide.WebActions;\\nimport jakarta.inject.Inject;\\n\\n@Feature\\npublic class BasicSearchF"}}';
+var previewData = JSON.parse(previewJson);
+
+var filesArray = [
+  "settings.gradle",
+  ".gitignore",
+  "build.gradle",
+  "src/test/java/demo/BasicSearchFilms.java",
+  "gradle/wrapper/gradle-wrapper.jar",
+  "gradle/wrapper/gradle-wrapper.properties",
+  "gradlew.sh",
+  "gradlew.bat",
+  "gradle.properties"
+ ];
+  
+function findOrCreateFolder(parent, folderName) {
+  for (var i = 0; i < parent.length; i++) {
+    if (parent[i].text === folderName) {
+      return parent[i].children; // already exists - so return
+    }
+  }
+  // Create new folder and add to parent
+  var folder = {
+    'text': folderName,
+    'children' : []
+  };
+  parent.push (folder);
+  return folder.children;
+}
+
+function getSortedFiles(previewPayload) {
+  var sortedFiles = Object.keys(previewPayload).sort();
+  return sortedFiles;
+}
+
+function initTree() {
+  var treeData = [
+  //  {'icon': 'jstree-file', 'text': '.gitignore'}
+  ];
+  //files = filesArray.sort();         // simple array
+  var files = getSortedFiles(previewData.files);
+  console.log (files);
+
+  for (var i = 0; i < files.length; i++) {
+	var file = files[i];
+	if (file.indexOf('/') === -1) { // normal file
+  	  treeData.push ({
+  	  	'id': file,
+  	  	'text': file,
+  	  	'icon': 'jstree-file'
+  	  });
+    }
+    else {
+      var parts = file.split('/');
+      var folder = treeData; // start at root
+      for (p = 0; p < parts.length - 1; p++) {
+      	folder = findOrCreateFolder (folder, parts[p]);
+      }
+      // now add remaing part as a file
+      folder.push ({
+      	'id': file,
+      	'text': parts[parts.length - 1],
+      	'icon': 'jstree-file', 
+      });
+    }
+  }
+
+  $('#tree2')
+    .jstree({'core' : {'data' : treeData}})
+    .bind("loaded.jstree", function (event, data) {
+      $(this).jstree("open_all");
+    })
+    .on("select_node.jstree", function (e, data) { 
+      
+      var filename = data.node.id;
+      var source = previewData.files[filename];
+      $("#file-source code").html(source);
+      Prism.highlightElement($('#file-source code')[0]);
+
+      console.log("node_id: " + data.node.id + " - " + source); 
+    });
+
+}5q
+
+$(function () {
+  // 6 create an instance when the DOM is ready
+  $('#jstree').jstree();
+  // 7 bind to events triggered on the tree
+  $('#jstree').on("changed.jstree", function (e, data) {
+    console.log(data.selected);
+  });
+  // 8 interact with the tree - either way is OK
+  /*$('button').on('click', function () {
+    $('#jstree').jstree(true).select_node('child_node_1');
+    $('#jstree').jstree('select_node', 'child_node_1');
+    $.jstree.reference('#jstree').select_node('child_node_1');
+  });*/
+
+  $('#tree').jstree({ 'core' : {
+    'data' : [
+      {'icon': 'jstree-file', 'text': '.gitignore'},
+      {'icon': 'jstree-file', 'text': 'build.gradle'},
+      {
+        'text': 'gradle',
+        'children' : [
+          {
+            'text': 'wrapper',
+            'children' : [
+              {
+                'text': 'gradle-wrapper.jar',
+                'icon': 'jstree-file'
+              },
+              {
+                'text': 'gradle-wrapper.properties',
+                'icon': 'jstree-file'
+              }
+            ]
+          }
+        ]
+      },
+      {'icon': 'jstree-file', 'text': 'gradlew.sh'},
+      {'icon': 'jstree-file', 'text': 'gradlew.bat'},
+      {'icon': 'jstree-file', 'text': 'gradle.properties'},
+      {
+        'text': 'src',
+        'children' : [
+          {
+            'text': 'test',
+            'children' : [
+              {
+                'text': 'java',
+                'children' : [
+                  {
+                    'text': 'demo',
+                    'children' : [
+                      {
+                        'text': 'BasicSearchFilms.java',
+                        'icon': 'jstree-file'
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }})
+  .bind("loaded.jstree", function (event, data) {
+    // you get two params - event & data - check the core docs for a detailed description
+    $(this).jstree("open_all");
+  });
+
+});
+
+</script>
+</body>
+</html>
+
