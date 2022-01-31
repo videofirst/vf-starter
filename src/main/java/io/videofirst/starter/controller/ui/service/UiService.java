@@ -13,29 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.videofirst.starter;
+package io.videofirst.starter.controller.ui.service;
 
-import io.micronaut.runtime.EmbeddedApplication;
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import jakarta.inject.Inject;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import static io.videofirst.starter.service.VfStarterFileService.STARTER;
+
+import io.videofirst.starter.model.VfStarter;
+import io.videofirst.starter.service.VfStarterFileService;
+import jakarta.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 
 /**
- * Basic integration test to test if the server loads OK.
+ * High level UI service class to be called by UI controller.
  *
  * @author Bob Marks
  * @since 2022.1
  */
-@MicronautTest(application = Application.class)
-class StarterTest {
+@Singleton
+@RequiredArgsConstructor
+public class UiService {
 
-    @Inject
-    private EmbeddedApplication<?> application;
+    private final VfStarterFileService starterService;
 
-    @Test
-    void should_load_server() {
-        Assertions.assertTrue(application.isRunning());
+    public VfStarter getVfStarter() {
+        return starterService.getStarters().get(STARTER);
     }
 
 }

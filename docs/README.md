@@ -1,4 +1,4 @@
-# VF Starter - Documentation
+# VF Starter - Developer Documentation
 
 ## Building VF Starter
 

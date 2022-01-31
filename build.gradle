@@ -24,6 +24,7 @@ dependencies {
     compileOnly "org.projectlombok:lombok:1.18.20"
     annotationProcessor "org.projectlombok:lombok:1.18.20"
 
+    annotationProcessor "io.micronaut:micronaut-inject-java"
     annotationProcessor "io.micronaut:micronaut-http-validation"
     annotationProcessor "io.micronaut.openapi:micronaut-openapi"
     implementation "io.micronaut:micronaut-http-client"
@@ -45,6 +46,8 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:5.8.1"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.8.1"
 
+    testAnnotationProcessor "io.micronaut:micronaut-inject-java"
+
     testImplementation "io.rest-assured:rest-assured:4.2.+"
     testImplementation 'io.micronaut:micronaut-http-client'
 
@@ -54,15 +57,10 @@ dependencies {
 }
 
 application {
-    mainClass.set("io.videofirst.vfa.Application")
+    mainClass.set("io.videofirst.starter.Application")
 }
 
 java {
     sourceCompatibility = JavaVersion.toVersion("1.8")
     targetCompatibility = JavaVersion.toVersion("1.8")
-}
-
-tasks.withType(JavaCompile) {
-    options.fork = true
-    options.forkOptions.jvmArgs << '-Dmicronaut.openapi.views.spec=rapidoc.enabled=true,swagger-ui.enabled=true,swagger-ui.theme=flattop'
 }

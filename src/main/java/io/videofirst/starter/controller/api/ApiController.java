@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.videofirst.starter.api;
+package io.videofirst.starter.controller.api;
 
 import io.micronaut.core.annotation.Nullable;
 import io.micronaut.core.io.Writable;
@@ -29,8 +29,8 @@ import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.QueryValue;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.videofirst.starter.api.service.ApiService;
 import io.videofirst.starter.configuration.properties.VfStarterConfigProps;
+import io.videofirst.starter.controller.api.service.ApiService;
 import io.videofirst.starter.model.VfStarterPreview;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -97,9 +97,9 @@ public class ApiController {
         content = @Content(mediaType = MediaType.APPLICATION_JSON)
     )
     public VfStarterPreview preview(@PathVariable("project") String project,
-        @Nullable @QueryValue("values") Map<String, String> parameters) {
-        parameters.put("project", project); // override project in parameters
-        return apiService.getPreview(parameters);
+        @Nullable @QueryValue("values") Map<String, String> parameters,
+        @QueryValue(value = "prefix", defaultValue = "true") boolean prefix) {
+        return apiService.getPreview(project, parameters, prefix);
     }
 
     /**
@@ -120,7 +120,6 @@ public class ApiController {
     public HttpResponse<Writable> generateZip(@PathVariable("project") String project,
         @NotNull @QueryValue("values") Map<String, String> parameters,
         @QueryValue(value = "prefix", defaultValue = "true") boolean prefix) {
-        parameters.put("project", project); // override project in parameters
         MutableHttpResponse<Writable> response = HttpResponse.created(new Writable() {
             @Override
             public void writeTo(OutputStream outputStream, @Nullable Charset charset) throws IOException {

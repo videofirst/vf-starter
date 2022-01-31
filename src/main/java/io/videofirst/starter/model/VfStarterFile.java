@@ -32,15 +32,17 @@ public class VfStarterFile {
     private String filename;
 
     private String raw;         // raw content (no templating support)
-    private String file;        // template content (using Freemarker)
+    private String template;    // template content (using Freemarker)
     private String base64;      // binary file which is base64 encoded
-    private String multi;       // template for creating multiple files
-    private boolean executable; // executable script
+
+    private boolean executable; // executable (sets permissions)
+    private boolean selected;   // initially selected file e.g. when previewing files
+    private boolean binary;     // if true, don't return when previewing files
 
     // Internal
 
     @JsonIgnore
-    private byte[] binary;      // raw binary contents
+    private byte[] bytes;      // raw binary contents
 
     @JsonIgnore
     private Template templateFilename;

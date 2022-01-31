@@ -148,7 +148,19 @@ label.active {
   color: var(--active-label) !important;
 }
 .actBtn {
-    background-color: #2792F0 !important;
+    background-color: #0096f0 !important;
+    border-radius: 4px !important;
+}
+.actBtn:hover {
+    background-color: #2379c4 !important;
+}
+.actBtnSecondary {
+    background-color: #fff !important;
+    color: #222 !important;
+    border-radius: 4px !important;
+}
+.actBtnSecondary:hover {
+    background-color: #f6f6f6 !important;
 }
 
 /* Preview Section */

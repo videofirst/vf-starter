@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.videofirst.starter.ui;
+package io.videofirst.starter.controller.ui;
 
 import static io.micronaut.core.util.CollectionUtils.mapOf;
 
@@ -24,8 +24,8 @@ import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.views.View;
 import io.swagger.v3.oas.annotations.Hidden;
+import io.videofirst.starter.controller.ui.service.UiService;
 import io.videofirst.starter.model.VfStarter;
-import io.videofirst.starter.ui.service.UiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

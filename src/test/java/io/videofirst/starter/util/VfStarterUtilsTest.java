@@ -13,29 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.videofirst.starter.ui.service;
+package io.videofirst.starter.util;
 
-import static io.videofirst.starter.service.VfStarterFileService.STARTER;
+import static io.videofirst.starter.util.VfStarterUtils.parseArgsToMap;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.entry;
 
-import io.videofirst.starter.model.VfStarter;
-import io.videofirst.starter.service.VfStarterFileService;
-import jakarta.inject.Singleton;
-import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Test;
 
 /**
- * High level UI service class to be called by UI controller.
+ * Unit test to test the methods of VfStarterUtils class.
  *
  * @author Bob Marks
  * @since 2022.1
  */
-@Singleton
-@RequiredArgsConstructor
-public class UiService {
+public class VfStarterUtilsTest {
 
-    private final VfStarterFileService starterService;
-
-    public VfStarter getVfStarter() {
-        return starterService.getStarters().get(STARTER);
+    @Test
+    void should_parseArgsToMap() {
+        assertThat(parseArgsToMap("a=1", "b=2")).containsExactly(entry("a", "1"), entry("b", "2"));
+        assertThat(parseArgsToMap()).isEmpty();
     }
 
 }

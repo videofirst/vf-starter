@@ -13,26 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.videofirst.starter.ui.model;
+package io.videofirst.starter.util;
 
-import io.videofirst.starter.model.VfStarter;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Model class to hold information to help render UI screens.
+ * Collection of useful static methods.
  *
  * @author Bob Marks
  * @since 2022.1
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class UiModel {
+public class VfStarterUtils {
 
-    private VfStarter starter;
+    /**
+     * Convert a String array of key1=value1 key2=value2 into a Map<String,String>.
+     */
+    public static Map<String, String> parseArgsToMap(String... args) {
+        Map<String, String> params = new HashMap<>();
+        for (String param : args) {
+            if (param.contains("=")) {
+                String[] paramKeyValue = param.split("=");
+                params.put(paramKeyValue[0], paramKeyValue[1]);
+            }
+        }
+        return params;
+    }
 
 }

@@ -1,5 +1,15 @@
 # Production configuration
+
+micronaut:
+  ssl:
+    port: 443
+    enabled: true
+    keyStore:
+      path: file:/etc/letsencrypt/live/videofirst.io/keystore.p12
+      password: ${VF_STARTER_KEY_STORE_PWD}
+      type: PKCS12
+
 vf-starter:
-  base-url: https://starter.videofirst.io
+  base-url: https://start.videofirst.io
   ui-url: ${vf-starter.base-url}/ui
   default-template: vfa

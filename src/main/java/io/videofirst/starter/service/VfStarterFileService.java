@@ -26,8 +26,9 @@ import io.videofirst.starter.model.VfStarterFile;
 import io.videofirst.starter.model.VfStarterParam;
 import io.videofirst.starter.model.VfStarterParamValidation;
 import jakarta.inject.Inject;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -118,8 +119,8 @@ public class VfStarterFileService {
 
     private void loadStarter(String starterId) throws IOException {
         String starterFilename = "starters/" + starterId + ".starter.yml";
-        File starterFile = new File(this.getClass().getClassLoader().getResource(starterFilename).getFile());
-        VfStarter starter = YAML_MAPPER.readValue(starterFile, VfStarter.class);
+        InputStream inputStream = this.getClass().getClassLoader().getResource(starterFilename).openStream();
+        VfStarter starter = YAML_MAPPER.readValue(inputStream, VfStarter.class);
         starter.setId(starterId);
 
         // Validate and if valid then init templates and insert into map
@@ -166,31 +167,34 @@ public class VfStarterFileService {
 
     private void initTemplates(VfStarter starter) throws IOException {
         for (Entry<String, VfStarterFile> entry : starter.getFiles().entrySet()) {
+            VfStarterFile starterFile = entry.getValue();
             String id = entry.getKey();
-            VfStarterFile templateItem = entry.getValue();
 
             // 1) Filename
-            templateItem.setId(id);
-            if (templateItem.getFilename() != null) {
-                Template templateFilename = templateService.initTemplate(templateItem.getFilename());
-                templateItem.setTemplateFilename(templateFilename);
+            starterFile.setId(id);
+            if (starterFile.getFilename() != null) {
+                Template templateFilename = templateService.initTemplate(starterFile.getFilename());
+                starterFile.setTemplateFilename(templateFilename);
             }
 
             // 2) File contents
-            String template = templateItem.getFile();
-            if (template != null) {
-                Template templateContents = templateService.initTemplate(template.trim());
-                templateItem.setTemplateContents(templateContents);
-            } else if (templateItem.getRaw() != null) {
-                templateItem.setRaw(templateItem.getRaw().trim());
-            } else if (templateItem.getBase64() != null) {
-                // Parse binary
-                String base64 = templateItem.getBase64().trim();
+            if (starterFile.getTemplate() != null) {
+                Template templateContents = templateService.initTemplate(starterFile.getTemplate().trim());
+                starterFile.setTemplateContents(templateContents);
+            } else if (starterFile.getRaw() != null) {
+                starterFile.setRaw(starterFile.getRaw().trim());
+            } else if (starterFile.getBase64() != null) {
+                // Parse Base64 to String
+                String base64 = starterFile.getBase64().trim();
                 byte[] binaryBytes = Base64.getDecoder().decode(base64);
-                templateItem.setBinary(binaryBytes);
+                if (starterFile.isBinary()) {
+                    starterFile.setBytes(binaryBytes);
+                } else {
+                    starterFile.setRaw(new String(binaryBytes, Charset.defaultCharset()));
+                }
             } else {
-                throw new VfStarterException("Please specify either [ template, plain, base64 ] for file [ " +
-                    id + " ]");
+                throw new VfStarterException("Please specify either [ template, plain, base64 ] for file [ " + id +
+                    " ]");
             }
         }
     }

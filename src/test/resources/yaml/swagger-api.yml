@@ -1,10 +1,10 @@
 openapi: 3.0.1
 info:
   title: API
-  description: The quickest way to generate VFA (Video First Automation) Projects
+  description: The quickest way to generate VFA (Video First Automation) projects
   contact:
     name: Video First
-    url: https://starter.videofirst.io
+    url: https://start.videofirst.io
     email: info@videofirst.io
   license:
     name: Apache 2.0
@@ -42,6 +42,12 @@ paths:
           additionalProperties:
             type: string
           nullable: true
+      - name: prefix
+        in: query
+        required: true
+        schema:
+          type: boolean
+          default: true
       responses:
         "200":
           description: JSON based preview of a new project

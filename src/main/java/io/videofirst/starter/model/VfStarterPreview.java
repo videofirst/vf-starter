@@ -34,5 +34,6 @@ import lombok.NoArgsConstructor;
 public class VfStarterPreview {
 
     private Map<String, String> files;
+    private String selectedFilename;
 
 }

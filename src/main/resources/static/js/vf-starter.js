@@ -8,7 +8,8 @@ function updateCommandsAndButtonStates () {
   var isInvalid = $('input.invalid').length > 0;
 
   var zipFile = $("#project").val() + ".zip";
-  var curlCommand = "curl " + VF_STARTER_BASE_URL + getPathAndParams(true) + " -o " + zipFile;
+  var curlOptions = VF_STARTER_BASE_URL.startsWith("https://localhost") ? "-k " : ""; // https://localhost needs '-k'
+  var curlCommand = "curl " + curlOptions + VF_STARTER_BASE_URL + getPathAndParams(true) + " -o " + zipFile;
   var unzipCommand = "unzip " + zipFile + " .";
 
   // Update button states / commands if validation state is invalid
@@ -25,7 +26,7 @@ function updateCommandsAndButtonStates () {
     $('.command-copy').removeClass('dn');
   }
 
-  $("#curl-url").text(curlCommand);
+  $("#curl-command").text(curlCommand);
   $("#unzip-command").text(unzipCommand);
 }
 
@@ -44,17 +45,10 @@ function getPathAndParams (isZipFile) {
   var project = $("#project").val();
   var ext = isZipFile ? "zip" : "json";
 
-  var pathAndParams = project + "." + ext + "?";
-  var sep = "";
-  if (isZipFile) {
-    pathAndParams += "prefix=" + $("#prefix").val();  // prefix only applicable to downloading ZIP files
-    sep = "&";
-  }
-
+  var pathAndParams = project + "." + ext + "?prefix=" + $("#prefix").val();
   $('input[data-param="vf-starter"]').each(function() {
     if (this.id !== 'project') {   // ignore project as it is first element in path
-      pathAndParams += sep + this.id + "=" + encodeURIComponent(this.value);
-      sep = "&";
+      pathAndParams += "&" + this.id + "=" + encodeURIComponent(this.value);
     }
   });
 
@@ -127,23 +121,33 @@ function initPreviewTree () {
   if (displayNone) {
   	$('.preview-section').removeClass('dn');
 
-   $('.preview-files-tree').jstree({'core' : {'data' : treeData}})
+   $('.preview-files-tree').jstree({'core' : {'data' : treeData}, 'selectedFilename': previewData.selectedFilename})
     .bind("loaded.jstree", function (event, data) {
       $(this).jstree("open_all");
-      $(this).jstree('select_node', files[0]);
+    })
+    .bind("refresh.jstree", function (event, data) {
+      $(this).jstree("deselect_all");
+      $(this).jstree("open_all");
+    })
+    .bind("open_all.jstree", function (event, data) {
+      var selectedFilename = data.instance.settings.selectedFilename;
+      if (selectedFilename) {
+        $(this).jstree('select_node', selectedFilename);
+      }
     })
     .on("select_node.jstree", function (e, data) {
       var filename = data.node.id;
       var source = getFileContents(filename);
-      //var source = previewData.files[filename];
       $(".preview-file-source code").html(source);
       Prism.highlightElement($('.preview-file-source code')[0]);
     });
   }
   else {
+    // JSTree already exists so just update data.  The refresh method will signal the bind listeners above ensuring
+    // that the node are all opened again and the default filename selected.
     $('.preview-files-tree').jstree(true).settings.core.data = treeData;
+    $('.preview-files-tree').jstree(true).settings.selectedFilename = previewData.selectedFilename;
     $('.preview-files-tree').jstree(true).refresh();
-    $('.preview-files-tree').jstree(true).select_node(files[i]);
   }
 
   $('#preview-modal').modal('open');

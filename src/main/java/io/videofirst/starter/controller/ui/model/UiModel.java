@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.videofirst.starter.model;
+package io.videofirst.starter.controller.ui.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.Map;
+import io.videofirst.starter.model.VfStarter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Model class which maps to the YAML in a starter file (e.g. vfa-starter.yaml).
+ * Model class to hold information to help render UI screens.
  *
  * @author Bob Marks
  * @since 2022.1
@@ -32,15 +31,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class VfStarter {
+public class UiModel {
 
-    private Map<String, VfStarterParam> parameters;
-    private Map<String, VfStarterFile> files;
-
-    // Internal
-
-    @JsonIgnore
-
-    private String id;  // set from starter filename e.g. "vfa" if filename = "vfa.starter.yml"
+    private VfStarter starter;
 
 }

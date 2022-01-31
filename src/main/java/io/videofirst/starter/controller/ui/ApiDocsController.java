@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.videofirst.starter.ui;
+package io.videofirst.starter.controller.ui;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;

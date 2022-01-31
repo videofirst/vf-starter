@@ -27,6 +27,10 @@ public class VfStarterException extends RuntimeException {
         super(message);
     }
 
+    public VfStarterException(Throwable cause) {
+        super(cause);
+    }
+
     public VfStarterException(String message, Throwable cause) {
         super(message, cause);
     }

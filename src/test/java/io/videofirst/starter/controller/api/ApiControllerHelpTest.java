@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.videofirst.starter.api;
+package io.videofirst.starter.controller.api;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.micronaut.http.HttpStatus;
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.micronaut.runtime.server.EmbeddedServer;
 import io.restassured.http.ContentType;
+import io.videofirst.starter.controller.AbstractControllerTest;
+import jakarta.inject.Inject;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
@@ -30,8 +32,12 @@ import org.junit.jupiter.api.Test;
  * @author Bob Marks
  * @since 2022.1
  */
-@MicronautTest
-class ApiControllerHelpTest extends AbstractStarterIntegrationTest {
+class ApiControllerHelpTest extends AbstractControllerTest {
+
+    @Inject
+    public ApiControllerHelpTest(EmbeddedServer server) {
+        super(server);
+    }
 
     @Test
     void should_show_help_screen() throws IOException {
@@ -47,5 +53,5 @@ class ApiControllerHelpTest extends AbstractStarterIntegrationTest {
         String expectedHelpText = getResource("/text/help-screen.txt");
         assertThat(actualHelpText).isEqualTo(expectedHelpText);
     }
-    
+
 }

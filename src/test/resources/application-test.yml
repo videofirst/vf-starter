@@ -1,0 +1,9 @@
+micronaut:
+  http:
+    client:
+      ssl:
+        enabled: true
+        trust-store:
+          path: classpath:vf-starter-self-signed.p12
+          password: changeit
+          type: PKCS12

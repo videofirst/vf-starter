@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.videofirst.starter.ui;
+package io.videofirst.starter.controller.ui;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import io.micronaut.http.HttpStatus;
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.micronaut.runtime.server.EmbeddedServer;
 import io.restassured.http.ContentType;
-import io.videofirst.starter.api.AbstractStarterIntegrationTest;
+import io.videofirst.starter.controller.AbstractControllerTest;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -30,8 +31,12 @@ import org.junit.jupiter.api.Test;
  * @author Bob Marks
  * @since 2022.1
  */
-@MicronautTest
-class UiControllerTest extends AbstractStarterIntegrationTest {
+class UiControllerTest extends AbstractControllerTest {
+
+    @Inject
+    public UiControllerTest(EmbeddedServer server) {
+        super(server);
+    }
 
     @Test
     void should_redirect_to_ui_screen_if_loaded_from_browser() {

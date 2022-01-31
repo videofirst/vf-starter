@@ -4,7 +4,7 @@
 <div class="parameters-section pb-2">
 
   <p class="content-header pv-1">Welcome to VF Starter - the quickest way to generate <a href="https://github.com/videofirst/vfa"
-    target="_blank">VFA (Video First Automation)</a> Projects</p>
+    target="_blank">VFA (Video First Automation)</a> projects</p>
 
   <div class="white-shadow-box row">
      <#list starter.parameters?values as param>
@@ -18,7 +18,7 @@
     The <b>Generate Zip</b> button to download your VFA project as a ZIP file.</p>
 
   <div class="actions-container tc pb-2">
-    <span class="waves-effect waves-light actBtn btn mh-0_5" onclick="previewFiles();"><i class="material-icons right">find_in_page</i>Preview Files</span>
+    <span class="waves-effect waves-light actBtnSecondary btn mh-0_5" onclick="previewFiles();"><i class="material-icons right">find_in_page</i>Preview Files</span>
     <span class="waves-effect waves-light actBtn btn mh-0_5" onclick="generateZip();"><i class="material-icons right">download</i>Generate ZIP</span>
   </div>
 
@@ -27,9 +27,9 @@
       your computer.</p>
 
     <div class="command-container">
-      <div id="curl-url" class="command-text"></div>
+      <div id="curl-command" class="command-text"></div>
       <div class="command-copy material-icons" class="material-icons"
-           onclick="copyText('copy-curl', 'Curl URL copied to clipboard');">content_copy</div>
+           onclick="copyText('curl-command', 'Curl URL copied to clipboard');">content_copy</div>
     </div>
 
     <p class="tc">This command will unzip the downloaded project ZIP file.</p>

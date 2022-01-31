@@ -1,5 +1,12 @@
 # Micronaut configuration
 micronaut:
+  ssl:
+    port: 443
+    enabled: true
+    keyStore:
+      path: classpath:vf-starter-self-signed.p12
+      password: changeit
+      type: PKCS12
   application:
     name: starter
   router:
@@ -13,12 +20,13 @@ micronaut:
         paths: classpath:META-INF/swagger
         mapping: /swagger/**
 
+# Endpoints config
 endpoints:
   health:
     enabled: true
 
 # All VFA Starter configuration
 vf-starter:
-  base-url: http://localhost:8080
+  base-url: https://localhost
   ui-path: /ui
   default-template: vfa

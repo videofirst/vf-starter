@@ -13,34 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.videofirst.starter.model;
+package io.videofirst.starter.controller;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.Map;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import io.micronaut.runtime.server.EmbeddedServer;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
- * Model class which maps to the YAML in a starter file (e.g. vfa-starter.yaml).
+ * Basic integration test to test if the VF Starter App loads OK.  If this fails, then this should be fixed before
+ * concentrating on the other integration tests.
  *
  * @author Bob Marks
  * @since 2022.1
  */
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class VfStarter {
+class BasicControllerTest extends AbstractControllerTest {
 
-    private Map<String, VfStarterParam> parameters;
-    private Map<String, VfStarterFile> files;
+    public BasicControllerTest(EmbeddedServer server) {
+        super(server);
+    }
 
-    // Internal
-
-    @JsonIgnore
-
-    private String id;  // set from starter filename e.g. "vfa" if filename = "vfa.starter.yml"
+    @Test
+    void should_load_server() {
+        Assertions.assertTrue(server.isRunning());
+    }
 
 }

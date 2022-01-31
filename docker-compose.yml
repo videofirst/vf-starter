@@ -1,0 +1,25 @@
+version: '2.1'
+
+# Use this to run Video First API locally via Docker (simply type `docker-compose up`).
+# This docker compose is missing the PostgreSQL section which is assumed is installed on laptop.
+#
+# To see inside the docker image run the following: -
+#
+#    winpty docker exec -it f84c7c512983 sh
+#
+services:
+
+  # VF-Starter micro-service
+  vf-starter:
+    image: vf-starter
+    container_name: vf-starter
+    ports:
+      - "443:443"
+    environment:
+      JAVA_OPTS: "-Xms1g -Xmx1g"
+
+  # Nginx server which redirect all http traffic to https
+  nginx-redirect:
+    image: foxylion/nginx-https-redirect
+    ports:
+      - "80:80"
