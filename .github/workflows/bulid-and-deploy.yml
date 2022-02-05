@@ -1,7 +1,7 @@
 name: Build and Deploy VF-Starter
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
 
