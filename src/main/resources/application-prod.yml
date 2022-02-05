@@ -5,7 +5,7 @@ micronaut:
     port: 443
     enabled: true
     keyStore:
-      path: file:/etc/letsencrypt/live/videofirst.io/keystore.p12
+      path: file:/etc/letsencrypt/live/keystore.p12
       password: ${VF_STARTER_KEY_STORE_PWD}
       type: PKCS12
 
