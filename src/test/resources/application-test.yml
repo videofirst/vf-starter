@@ -1,4 +1,6 @@
 micronaut:
+  ssl:
+    port: -1
   http:
     client:
       ssl:
