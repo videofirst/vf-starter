@@ -45,16 +45,15 @@ public abstract class AbstractControllerTest extends AbstractIntegrationTest {
             return; // already set up
         }
 
-        // Ensure server is OK by hitting `/health` endpoint.
+        // Ensure server is OK by hitting `/health` endpoint
         try (HttpClient client = server.getApplicationContext()
             .createBean(HttpClient.class, server.getURL())) {
             assertEquals(HttpStatus.OK, client.toBlocking().exchange("/health").status());
         }
 
-        // Set RestAssured port to use HTTPS
-        RestAssured.baseURI = "https://localhost:" + server.getPort();
-
-        // Add self-signed cert to trust store for testing purposes.
+        // Set RestAssured baseURI, port and add self-signed cert to trust store for testing purposes.
+        RestAssured.baseURI = server.getURL().toString();
+        RestAssured.port = server.getPort();
         RestAssured.authentication =
             RestAssured.certificate(
                 SSL_TRUST_STORE_NAME,

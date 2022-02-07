@@ -1,6 +1,6 @@
 micronaut:
   ssl:
-    port: -1
+    port: -1    # Run on random port
   http:
     client:
       ssl:
