@@ -1,3 +1,6 @@
+# Workflow for building and deploying VF-Starter to AWS.
+# Note, please set a GitHub Actions Secret at repository level for `AWS_ROLE_TO_ASSUME` (AWS IAM Role ARN)
+
 name: Build and Deploy VF-Starter
 
 on:
@@ -37,3 +40,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           role-session-name: GitHubActions-${{ github.run_id }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
