@@ -1,5 +1,19 @@
-# Workflow for building and deploying VF-Starter to AWS.
-# Note, please set a GitHub Actions Secret at repository level for `AWS_ROLE_TO_ASSUME` (AWS IAM Role ARN)
+# Workflow for building and deploying VF-Starter to AWS which does the following: -
+#
+#    1. Check out source code
+#    2. Set Java to version 8
+#    3. Do a Gradle build
+#    4. Create temporary AWS access credentials (using GitHub OIDC connector on AWS)
+#    5. Log into AWS ECR (required to push docker image).
+#    6. Build, tag, and push Docker image to Amazon ECR.
+#    7. Restart Docker Compose on instance using AWS SSM (using a custom SSM document).
+#    8. Smoke test against https://start.videofirst.io using curl (with retries).
+#
+# > Note, for this workflow to work, please set the following secrets: -
+#
+#    1. AWS_ROLE_TO_ASSUME     = AWS IAM Role ARN which is connected to GitHub OIDC connector (best practice security).
+#    2. AWS_SSM_DOC_NAME       = AWS SSM Document Name - this is a custom document which restarts Docker on an instance.
+#    3. AWS_TARGET_INSTANCE_ID = AWS EC2 Instance id where VF Starter is running.
 
 name: Build and Deploy VF-Starter
 
@@ -23,18 +37,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      #      - name: Check out code
-      #        uses: actions/checkout@v2
-      #
-      #      - name: Set up JDK 8
-      #        uses: actions/setup-java@v2
-      #        with:
-      #          java-version: '8'
-      #          distribution: 'adopt'
-      #
-      #      - name: Build with Gradle
-      #        run: |
-      #          ./gradlew build --no-daemon
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+
+      - name: Build with Gradle
+        run: |
+          ./gradlew build --no-daemon
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -43,27 +57,27 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           role-session-name: GitHubActions-${{ github.run_id }}
 
-      #      - name: Login to Amazon ECR
-      #        id: login-ecr
-      #        uses: aws-actions/amazon-ecr-login@v1
-      #
-      #      - name: Build, tag, and push Docker image to Amazon ECR
-      #        env:
-      #          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-      #          ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
-      #        run: |
-      #          IMAGE_TAG=$(git rev-parse --short HEAD)
-      #          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
-      #          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-      #          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Restart Docker Compose
+      - name: Build, tag, and push Docker image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
+        run: |
+          IMAGE_TAG=$(git rev-parse --short HEAD)
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+      - name: Restart Docker Compose using AWS SSM
         run: |
           aws ssm send-command --region ${{ env.AWS_REGION }} --document-name "${{ secrets.AWS_SSM_DOC_NAME }}" \
               --targets '[{"Key":"InstanceIds","Values":["${{ secrets.AWS_TARGET_INSTANCE_ID }}"]}]' \
               --parameters '{}' --max-errors "0" --timeout-seconds 60
 
-      - name: Smoke Test Url
+      - name: Smoke Test Url [ ${{ env.VF_STARTER_URL }} ]
         run: |
           curl --connect-timeout 5 --max-time 60 --retry 6 --retry-delay 0 --retry-max-time 60 --retry-connrefused \
           ${{ env.VF_STARTER_URL }}
