@@ -59,8 +59,8 @@ jobs:
 
       - name: Restart Docker Compose
         run: |
-          aws ssm send-command --region ${{ env.AWS_REGION }} --document-name "${{ env.AWS_SSM_DOC_NAME }}" \
-              --targets '[{"Key":"InstanceIds","Values":["${{ env.AWS_TARGET_INSTANCE_ID }}"]}]' \
+          aws ssm send-command --region ${{ env.AWS_REGION }} --document-name "${{ secrets.AWS_SSM_DOC_NAME }}" \
+              --targets '[{"Key":"InstanceIds","Values":["${{ secrets.AWS_TARGET_INSTANCE_ID }}"]}]' \
               --parameters '{}' --max-errors "0" --timeout-seconds 60
 
       - name: Smoke Test Url
