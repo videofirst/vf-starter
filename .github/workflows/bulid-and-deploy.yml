@@ -79,5 +79,6 @@ jobs:
 
       - name: Smoke Test Url [ ${{ env.VF_STARTER_URL }} ]
         run: |
+          sleep 10 
           curl --connect-timeout 5 --max-time 60 --retry 6 --retry-delay 0 --retry-max-time 60 --retry-connrefused \
           ${{ env.VF_STARTER_URL }}
