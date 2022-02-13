@@ -34,7 +34,7 @@ jobs:
 
       - name: Build with Gradle
         run: |
-          ./gradlew build --no-daemon
+          ./gradlew clean build --no-daemon
           cp build/libs/*-all.jar vf-starter.jar  # Rename file
 
       # Generate release items (https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions)

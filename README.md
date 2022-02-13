@@ -1,9 +1,7 @@
 # [VF Starter](https://start.videofirst.io) &middot; [![GitHub license](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/videofirst/vf-starter/blob/master/LICENSE) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/videofirst/vf-starter/blob/README.md)
 
-Generates [VFA (Video First Automation)](https://github.com/videofirst/vfa) projects.
-
-VF-Starter is a small web application (built using [Micronaut Framework](https://micronaut.io/)) which generate VFA
-projects and enables users to start their automation journey as quickly and easily as possible.
+Generates [VFA (Video First Automation)](https://github.com/videofirst/vfa) projects which enables users to start their
+automation journey as quickly and easily as possible.
 
 ## UI
 
@@ -35,6 +33,7 @@ API documentation is available: -
 
 ## Developer Docs
 
+**VF Starter** is a small Java web application and CLI, built using [Micronaut Framework](https://micronaut.io/).  
 Developer documentation is available: -
 
 * [docs](/docs)
