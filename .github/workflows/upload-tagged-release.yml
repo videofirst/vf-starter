@@ -37,11 +37,6 @@ jobs:
         run: |
           ./gradlew clean build --no-daemon
           cp build/libs/*-all.jar vf-starter.jar  # Rename file
-          ls -al
-
-      - name: List files
-        run: |
-          ls -al
 
       # Generate release items (https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions)
       - name: Generate Release Items
