@@ -12,7 +12,7 @@ if [[ "$RELEASE_EXISTS" == "200" ]]; then
 fi
 
 # Tag this release using GIT and push
-echo "Creating tag Version [ $TAG_VERSION ] to GIT"
+echo "Creating GIT tag version [ $TAG_VERSION ]"
 git tag $TAG_VERSION
 git push origin --tags
 

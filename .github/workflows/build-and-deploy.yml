@@ -37,8 +37,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-#      - name: Check out code
-#        uses: actions/checkout@v2
+      - name: Check out code
+        uses: actions/checkout@v2
 #
 #      - name: Set up JDK 8
 #        uses: actions/setup-java@v2
