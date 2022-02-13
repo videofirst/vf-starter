@@ -1,9 +1,9 @@
-# Workflow for building and deploying VF-Starter to AWS which does the following: -
+# GitHub Actions workflow for building and deploying VF-Starter to AWS which does the following: -
 #
-#    1. Check out source code
-#    2. Set Java to version 8
-#    3. Do a Gradle build
-#    4. Create temporary AWS access credentials (using GitHub OIDC connector on AWS)
+#    1. Check out source code.
+#    2. Set Java to version 8.
+#    3. Do a Gradle build.
+#    4. Create temporary AWS access credentials (using GitHub OIDC connector on AWS).
 #    5. Log into AWS ECR (required to push docker image).
 #    6. Build, tag, and push Docker image to Amazon ECR.
 #    7. Restart Docker Compose on instance using AWS SSM (using a custom SSM document).

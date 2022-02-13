@@ -1,0 +1,52 @@
+# GitHub Actions workflow for uploading a tagged release to https://github.com/videofirst/vf-starter/releases
+#
+#    1. Check out source code.
+#    2. Set Java to version 8.
+#    3. Do a Gradle build and renames built JAR file to `vf-start.jar`.
+#    4. Generate Release Items (e.g. release title which is used in next step).
+#    5. Upload release to GitHub
+#
+# > Note, run the `tag-release.sh` script to trigger this workflow.  See `RELEASE.md` for more info.
+
+name: Upload Tagged Release
+
+# Only run if tagged with a release version e.g. 'v2001.1'
+on:
+  create:
+    tags:
+      - 'v*'
+
+jobs:
+
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+
+      - name: Build with Gradle
+        run: |
+          ./gradlew build --no-daemon
+          cp build/libs/*-all.jar vf-start.jar  # Rename file
+
+      # Generate release items (https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions)
+      - name: Generate Release Items
+        id: generate_release_items
+        run: |
+          echo "::set-output name=release_title::$(cat gradle.properties | grep version= | cut -d'=' -f2)"
+
+      - name: Upload release to GitHub
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "vf-starter.jar"
+          name: "VF-Starter ${{ steps.generate_release_items.outputs.release_title }}"
+          bodyFile: "RELEASE-NOTES.md"
+          token: ${{ secrets.GITHUB_TOKEN }}

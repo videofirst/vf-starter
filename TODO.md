@@ -6,10 +6,8 @@ Todo list for VF Starter.
 ## In-Progress
 
 - [ ] Update VFA Starter so README.md has instructions on getting started.
+- [ ] Update README.md to include CLI mode.
 
 ## Future items
 
-- [ ] Investigate separate GitHub Actions workflow to release to GitHub releases.
-- [ ] Update README.md to include CLI mode.
-
-> **NOTE**: When committing, move these (shorten / improve as applicable) to CHANGELOG.md.
+> **NOTE**: When committing, move these item (shorten / tidy where applicable) to CHANGELOG.md.
